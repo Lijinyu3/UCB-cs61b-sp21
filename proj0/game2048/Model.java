@@ -138,6 +138,14 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        int board_size = b.size();
+        for (int row = 0; row < board_size; row += 1) {
+            for (int col = 0; col < board_size; col += 1) {
+                if (b.tile(col, row) == null) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -147,7 +155,64 @@ public class Model extends Observable {
      * given a Tile object t, we get its value with t.value().
      */
     public static boolean maxTileExists(Board b) {
-        // TODO: Fill in this function.
+        int board_size = b.size();
+        for (int col = 0; col < board_size; col += 1) {
+            for (int row = 0; row < board_size; row += 1) {
+                Tile t = b.tile(col, row);
+                if (t != null && t.value() == MAX_PIECE) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isValidTilePosition(Board b, int col, int row) {
+        if (col < 0 || row < 0) {
+            return false;
+        } else if (col >= b.size() || row >= b.size()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Return true if there are any same adjacent tiles for the tile of the given position.
+     */
+    public static boolean atLeastOneSameAdjacent(Board b, int col, int row) {
+        if (b.tile(col, row) == null) {
+            return false;
+        }
+        // four directions: left, down, up, right
+        int[] dx = new int[]{-1, 0, 1, 0};
+        int[] dy = new int[]{0, -1, 0, 1};
+        int this_tile_value = b.tile(col, row).value();
+        for (int i = 0; i < dx.length; i++) {
+            int new_col = col + dx[i], new_row = row + dy[i];
+            if (isValidTilePosition(b, new_col, new_row)) {
+                Tile new_tile = b.tile(new_col, new_row);
+                if (new_tile != null && new_tile.value() == this_tile_value) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Return true if there are any same adjacent tile pairs in b.
+     * Null tiles are not same as any types of tile even itself
+     */
+    public static boolean atLeastOnePairTilesSame(Board b) {
+        int board_size = b.size();
+        for (int col = 0; col < board_size; col += 1) {
+            for (int row = 0; row < board_size; row += 1) {
+                if (atLeastOneSameAdjacent(b, col, row)) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -159,7 +224,12 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
-        return false;
+        // Check if b has empty spaces
+        if (emptySpaceExists(b)) {
+            return true;
+        } else {
+            return atLeastOnePairTilesSame(b);
+        }
     }
 
 
