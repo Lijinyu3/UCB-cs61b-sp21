@@ -95,25 +95,32 @@ public class Model extends Observable {
     }
 
     /**
-     * Return whether is a valid move from cur_t to target_t
+     * Return whether is a valid move from the tile in cur_row to target tile in target_row
      */
-    public boolean isValidMove(Tile cur_t, Tile target_t, boolean isTargetMerged) {
+    public boolean isValidMove(int col, int cur_row, int target_row, boolean isTargetMerged) {
+        // no tile should in the path
+        for (int row = cur_row + 1; row < target_row; row += 1) {
+            if (this.tile(col, row) != null) {
+                return false;
+            }
+        }
+        Tile cur_t = this.tile(col, cur_row), target_t = this.tile(col, target_row);
         if (target_t == null) {
             return true;
-        } else if (cur_t.value() == target_t.value() && !isTargetMerged) {
-            return true;
-        } else {
-            return false;
         }
-    }
+        if (cur_t.value() == target_t.value() && !isTargetMerged) {
+            return true;
+        }
+        return false;
+}
 
     /**
      * Return the maximal valid row current tile could move to in the same column
      */
     public int whichRowTileGo(int col, int row, boolean[] merged) {
         int far_valid_row = row;
-        for (int target_row = row; target_row < this.size(); target_row += 1) {
-            if (isValidMove(this.tile(col, row), this.tile(col, target_row), merged[target_row])) {
+        for (int target_row = row + 1; target_row < this.size(); target_row += 1) {
+            if (isValidMove(col, row, target_row, merged[target_row])) {
                 far_valid_row = Math.max(far_valid_row, target_row);
             }
         }
