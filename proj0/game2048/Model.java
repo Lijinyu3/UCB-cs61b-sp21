@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author jinyu
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -94,6 +94,54 @@ public class Model extends Observable {
         setChanged();
     }
 
+    /**
+     * Return whether is a valid move from cur_t to target_t
+     */
+    public boolean isValidMove(Tile cur_t, Tile target_t, boolean isTargetMerged) {
+        if (target_t == null) {
+            return true;
+        } else if (cur_t.value() == target_t.value() && !isTargetMerged) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Return the maximal valid row current tile could move to in the same column
+     */
+    public int whichRowTileGo(int col, int row, boolean[] merged) {
+        int far_valid_row = row;
+        for (int target_row = row; target_row < this.size(); target_row += 1) {
+            if (isValidMove(this.tile(col, row), this.tile(col, target_row), merged[target_row])) {
+                far_valid_row = Math.max(far_valid_row, target_row);
+            }
+        }
+        return far_valid_row;
+    }
+
+    /**
+     * Tilt one column of the board and increase the score if merged
+     */
+    public boolean tileOneColumn(int col) {
+        boolean[] merged = new boolean[this.size()];
+        boolean changed = false;
+        // order from front to back
+        for (int row = this.size() - 1; row >= 0; row -= 1) {
+            // empty tile doesn't need move
+            if (this.tile(col, row) != null) {
+                int new_row = whichRowTileGo(col, row, merged);
+                changed = changed || new_row != row;
+                // if merged
+                if (this.board.move(col, new_row, this.tile(col, row))) {
+                    merged[new_row] = true;
+                    this.score += this.tile(col, new_row).value();
+                }
+            }
+        }
+        return changed;
+    }
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -110,7 +158,13 @@ public class Model extends Observable {
         boolean changed;
         changed = false;
 
-        // TODO: Modify this.board (and perhaps this.score) to account
+        this.board.setViewingPerspective(side);
+        for (int col = 0; col < this.size(); col += 1) {
+            if (tileOneColumn(col)) {
+                changed = true;
+            }
+        }
+        this.board.setViewingPerspective(Side.NORTH);
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
