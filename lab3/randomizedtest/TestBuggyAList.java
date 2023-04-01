@@ -58,7 +58,7 @@ public class TestBuggyAList {
         AListNoResizing<Integer> expectedList = new AListNoResizing<>();
         BuggyAList<Integer> actualList = new BuggyAList<>();
 
-        int N = 5000;
+        int N = (int) 1e5;
         for (int i = 0; i < N; i += 1) {
             int operationNumber = StdRandom.uniform(0, 4);
             if (operationNumber == 0) {
@@ -66,7 +66,7 @@ public class TestBuggyAList {
                 int randVal = StdRandom.uniform(0, 100);
                 expectedList.addLast(randVal);
                 actualList.addLast(randVal);
-                System.out.println("addLast(" + randVal + ")");
+//                System.out.println("addLast(" + randVal + ")");
             } else if (operationNumber == 1) {
                 // size
                 int expectedSize = expectedList.size();
