@@ -1,6 +1,6 @@
 package deque;
 
-public class ArrayDeque<T> {
+public class ArrayDeque<T> implements Deque<T>{
     private T[] array;
     private int size;
     private int nextFirst;
@@ -36,6 +36,7 @@ public class ArrayDeque<T> {
         this.array = newArray;
     }
 
+    @Override
     public void addFirst(T item) {
         if (this.size == this.array.length) {
             this.resize(this.size * 2);
@@ -45,6 +46,7 @@ public class ArrayDeque<T> {
         this.nextFirst--;
     }
 
+    @Override
     public void addLast(T item) {
         if (this.size == this.array.length) {
             this.resize(this.size * 2);
@@ -54,14 +56,16 @@ public class ArrayDeque<T> {
         this.nextLast++;
     }
 
-    public boolean isEmpty() {
-        return this.size == 0;
-    }
+//    public boolean isEmpty() {
+//        return this.size == 0;
+//    }
 
+    @Override
     public int size() {
         return this.size;
     }
 
+    @Override
     public void printDeque() {
         int i = (this.nextFirst + 1) % this.array.length;
         int l = this.size();
@@ -77,6 +81,7 @@ public class ArrayDeque<T> {
         return (double) this.size / this.array.length;
     }
 
+    @Override
     public T removeFirst() {
         if (this.isEmpty() || this.nextFirst == this.array.length - 1) {
             return null;
@@ -91,6 +96,7 @@ public class ArrayDeque<T> {
         return toBeDeletedItem;
     }
 
+    @Override
     public T removeLast() {
         if (this.isEmpty() || this.nextLast == 0) {
             return null;
@@ -105,6 +111,7 @@ public class ArrayDeque<T> {
         return toBeDeletedItem;
     }
 
+    @Override
     public T get(int index) {
         if (index < 0 || index >= this.size()) {
             return null;
