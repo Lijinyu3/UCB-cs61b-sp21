@@ -18,23 +18,30 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     }
 
     private void copyArray(T[] newArray) {
-        int diff = newArray.length - this.array.length;
-        int firstLength = this.array.length - 1 - this.nextFirst;
-        int newFirstDest = diff + this.nextFirst + 1;
-        int lastLength = this.nextLast;
-        if (firstLength > 0) {
-            System.arraycopy(this.array, this.nextFirst + 1, newArray, newFirstDest, firstLength);
-        }
-        if (lastLength > 0) {
-            System.arraycopy(this.array, 0, newArray, 0, lastLength);
+        int firstPos = (this.nextFirst + 1) % this.array.length;
+        int lastPos = Math.floorMod(this.nextLast - 1, this.array.length);
+        if (firstPos < lastPos) {
+            System.arraycopy(this.array, firstPos, newArray, 1, this.size);
+            this.nextFirst = 0;
+            this.nextLast = this.size + 1;
+        } else {
+            int diff = newArray.length - this.array.length;
+            int firstLength = this.array.length - 1 - this.nextFirst;
+            int newFirstDest = diff + this.nextFirst + 1;
+            int lastLength = this.nextLast;
+            if (firstLength > 0) {
+                System.arraycopy(this.array, this.nextFirst + 1, newArray, newFirstDest, firstLength);
+            }
+            if (lastLength > 0) {
+                System.arraycopy(this.array, 0, newArray, 0, lastLength);
+            }
+            this.nextFirst += diff;
         }
     }
 
     private void resize(int newSize) {
         T[] newArray = (T[]) new Object[newSize];
         this.copyArray(newArray);
-        int diff = newSize - this.array.length;
-        this.nextFirst += diff;
         this.array = newArray;
     }
 
@@ -46,6 +53,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         this.array[nextFirst] = item;
         this.size++;
         this.nextFirst--;
+        this.nextFirst = Math.floorMod(this.nextFirst, this.array.length);
     }
 
     @Override
@@ -56,6 +64,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         this.array[nextLast] = item;
         this.size++;
         this.nextLast++;
+        this.nextLast = Math.floorMod(this.nextLast, this.array.length);
     }
 
 //    public boolean isEmpty() {
@@ -69,7 +78,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public void printDeque() {
-        int i = (this.nextFirst + 1) % this.array.length;
+        int i = Math.floorMod((this.nextFirst + 1) ,this.array.length);
         int l = this.size();
         while (l > 0) {
             System.out.print(this.array[i] + " ");
@@ -85,13 +94,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public T removeFirst() {
-        if (this.isEmpty() || this.nextFirst == this.array.length - 1) {
+        if (this.isEmpty()) {
             return null;
         }
         if (this.usageRatio() < MIN_USAGE_RATIO && this.array.length > STARTING_SIZE) {
             this.resize(this.array.length / 2);
         }
-        int toBeDeletedIndex = this.nextFirst + 1;
+        int toBeDeletedIndex = (this.nextFirst + 1) % this.array.length;
         T toBeDeletedItem = this.array[toBeDeletedIndex];
         this.size--;
         this.nextFirst = toBeDeletedIndex;
@@ -100,13 +109,13 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public T removeLast() {
-        if (this.isEmpty() || this.nextLast == 0) {
+        if (this.isEmpty()) {
             return null;
         }
         if (this.usageRatio() < MIN_USAGE_RATIO && this.array.length > STARTING_SIZE) {
             this.resize(this.array.length / 2);
         }
-        int toBeDeletedIndex = this.nextLast - 1;
+        int toBeDeletedIndex = Math.floorMod((this.nextLast - 1) ,this.array.length);
         T toBeDeletedItem = this.array[toBeDeletedIndex];
         this.size--;
         this.nextLast = toBeDeletedIndex;
@@ -118,7 +127,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         if (index < 0 || index >= this.size()) {
             return null;
         }
-        int i = (this.nextFirst + 1 + index) % this.array.length;
+        int i = Math.floorMod((this.nextFirst + 1 + index) ,this.array.length);
         return this.array[i];
     }
 
