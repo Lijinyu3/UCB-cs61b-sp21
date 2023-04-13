@@ -123,6 +123,25 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof Deque otherAD) {
+            if (this.size() != otherAD.size()) {
+                return false;
+            }
+            for (int i = 0; i < this.size(); i++) {
+                if (this.get(i) != otherAD.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public Iterator<T> iterator() {
         return new ArrayDequeIterator();
     }

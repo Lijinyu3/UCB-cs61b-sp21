@@ -138,4 +138,37 @@ public class ArrayDequeTest {
             }
         }
     }
+
+    @Test
+    public void equalsTestEqual() {
+        Deque<Integer> deque1 = new ArrayDeque<>();
+        deque1.addLast(2);
+        deque1.addLast(3);
+        deque1.addLast(4);
+        Deque<Integer> deque2 = new LinkedListDeque<>();
+        deque2.addLast(2);
+        deque2.addLast(3);
+        deque2.addLast(4);
+        assertTrue(deque1.equals(deque2));
+
+        deque1 = new ArrayDeque<>();
+        deque2 = new LinkedListDeque<>();
+        final int N = 10;
+        for (int i = 0; i < N; i++) {
+            final int n = StdRandom.uniform(N);
+            for (int j = 0; j < n; j++) {
+                deque1.addLast(j);
+                deque2.addLast(j);
+            }
+            assertTrue(deque1.equals(deque2));
+        }
+
+        deque1 = new ArrayDeque<>();
+        deque2 = new LinkedListDeque<>();
+        assertTrue(deque1.equals(deque2));
+
+        deque1 = new ArrayDeque<>();
+        deque2 = deque1;
+        assertTrue(deque1.equals(deque2));
+    }
 }
