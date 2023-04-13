@@ -162,4 +162,44 @@ public class LinkedListDequeTest {
             }
         }
     }
+
+    @Test
+    public void randomizedComparison() {
+        LinkedListDeque<Integer> actualList = new LinkedListDeque<>();
+        java.util.LinkedList<Integer> expectedList = new LinkedList<>();
+        final int N = (int) 1e5;
+        for (int i = 0; i < N; i++) {
+            int operationNumber = StdRandom.uniform(0, 7);
+            if (operationNumber == 0) {
+                actualList.addFirst(i);
+                expectedList.addFirst(i);
+            } else if (operationNumber == 1) {
+                actualList.addLast(i);
+                expectedList.addLast(i);
+            } else if (operationNumber == 2) {
+                assertEquals(expectedList.isEmpty(), actualList.isEmpty());
+            } else if (operationNumber == 3) {
+                assertEquals(expectedList.size(), actualList.size());
+            } else if (operationNumber == 4) {
+                if (expectedList.isEmpty()) {
+                    assertNull(actualList.removeFirst());
+                } else {
+                    assertEquals(expectedList.removeFirst(), actualList.removeFirst());
+                }
+            } else if (operationNumber == 5) {
+                if (expectedList.isEmpty()) {
+                    assertNull(actualList.removeLast());
+                } else {
+                    assertEquals(expectedList.removeLast(), actualList.removeLast());
+                }
+            } else if (operationNumber == 6) {
+                int index = StdRandom.uniform(0, N);
+                if (index >= expectedList.size()) {
+                    assertNull(actualList.get(index));
+                } else {
+                    assertEquals(expectedList.get(index), actualList.get(index));
+                }
+            }
+        }
+    }
 }
