@@ -1,6 +1,11 @@
 package deque;
 
+import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
+
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import static org.junit.Assert.*;
 
 
@@ -120,6 +125,41 @@ public class LinkedListDequeTest {
 
         for (double i = 999999; i > 500000; i--) {
             assertEquals("Should have the same value", i, (double) lld1.removeLast(), 0.0);
+        }
+    }
+
+    @Test
+    public void iterationTest() {
+        LinkedListDeque<Integer> lld1 = new LinkedListDeque<>();
+        java.util.Deque<Integer> lld2 = new java.util.LinkedList<>();
+        final int N = (int) 1e5;
+        for (int i = 0; i < N; i++) {
+            int opNum = StdRandom.uniform(0, 2);
+            if (opNum == 0) {
+                lld1.addLast(i);
+                lld2.addLast(i);
+            } else if (opNum == 1) {
+                lld1.addFirst(i);
+                lld2.addFirst(i);
+            }
+        }
+        Iterator<Integer> iterator1 = lld2.iterator();
+        for (int i : lld1) {
+            assertEquals(iterator1.next().intValue(), i);
+        }
+
+        Iterator<Integer> iterator2 = lld1.iterator();
+        for (int i : lld2) {
+            assertEquals(i, iterator2.next().intValue());
+        }
+
+        iterator1 = lld1.iterator();
+        iterator2 = lld2.iterator();
+        for (int i = 0; i < N + 10; i++) {
+            assertEquals(iterator2.hasNext(), iterator1.hasNext());
+            if (iterator2.hasNext()) {
+                assertEquals(iterator2.next(), iterator1.next());
+            }
         }
     }
 }
