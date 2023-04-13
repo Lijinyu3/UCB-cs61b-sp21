@@ -114,18 +114,34 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
         if (this == o) {
             return true;
         }
-        if (o instanceof Deque otherAD) {
-            if (this.size() != otherAD.size()) {
+//        if (o instanceof Deque otherAD) {
+//            if (this.size() != otherAD.size()) {
+//                return false;
+//            }
+//            for (int i = 0; i < this.size(); i++) {
+//                if (this.get(i) != otherAD.get(i)) {
+//                    return false;
+//                }
+//            }
+//            return true;
+//        }
+        if (o == null) {
+            return false;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+        Deque<T> otherAD = (Deque<T>) o;
+
+        if (this.size() != otherAD.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++) {
+            if (this.get(i) != otherAD.get(i)) {
                 return false;
             }
-            for (int i = 0; i < this.size(); i++) {
-                if (this.get(i) != otherAD.get(i)) {
-                    return false;
-                }
-            }
-            return true;
         }
-        return false;
+        return true;
     }
 
     @Override
