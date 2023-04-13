@@ -2,6 +2,9 @@ package deque;
 
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
+
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 public class ArrayDequeTest {
@@ -97,5 +100,42 @@ public class ArrayDequeTest {
             adList.removeLast();
         }
         assertTrue(adList.isEmpty());
+    }
+
+    @Test
+    public void iterationTest() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        java.util.Deque<Integer> ad2 = new java.util.ArrayDeque<>();
+
+        final int N = (int) 1e5;
+        for (int i = 0; i < N; i++) {
+            int opNum = StdRandom.uniform(2);
+            if (opNum == 0) {
+                ad1.addLast(i);
+                ad2.addLast(i);
+            } else if (opNum == 1) {
+                ad1.addFirst(i);
+                ad2.addFirst(i);
+            }
+        }
+
+        Iterator<Integer> iterator1 = ad1.iterator();
+        for (int i : ad2) {
+            assertEquals(i, iterator1.next().intValue());
+        }
+
+        Iterator<Integer> iterator2 = ad2.iterator();
+        for (int i : ad1) {
+            assertEquals(iterator2.next().intValue(), i);
+        }
+
+        iterator1 = ad1.iterator();
+        iterator2 = ad2.iterator();
+        for (int i = 0; i < N + 10; i++) {
+            assertEquals(iterator2.hasNext(), iterator1.hasNext());
+            if (iterator2.hasNext()) {
+                assertEquals(iterator2.next(), iterator1.next());
+            }
+        }
     }
 }
