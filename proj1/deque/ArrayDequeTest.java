@@ -145,14 +145,14 @@ public class ArrayDequeTest {
         deque1.addLast(2);
         deque1.addLast(3);
         deque1.addLast(4);
-        Deque<Integer> deque2 = new ArrayDeque<>();
+        Deque<Integer> deque2 = new LinkedListDeque<>();
         deque2.addLast(2);
         deque2.addLast(3);
         deque2.addLast(4);
         assertTrue(deque1.equals(deque2));
 
         deque1 = new ArrayDeque<>();
-        deque2 = new ArrayDeque<>();
+        deque2 = new LinkedListDeque<>();
         final int N = 10;
         for (int i = 0; i < N; i++) {
             final int n = StdRandom.uniform(N);
@@ -164,11 +164,31 @@ public class ArrayDequeTest {
         }
 
         deque1 = new ArrayDeque<>();
-        deque2 = new ArrayDeque<>();
+        deque2 = new LinkedListDeque<>();
         assertTrue(deque1.equals(deque2));
 
         deque1 = new ArrayDeque<>();
         deque2 = deque1;
         assertTrue(deque1.equals(deque2));
+    }
+
+    @Test
+    public void equalsTestUnequal() {
+        Deque<Integer> deque1 = new ArrayDeque<>();
+        deque1.addLast(2);
+        deque1.addLast(3);
+        deque1.addLast(4);
+        Deque<String> deque2 = new LinkedListDeque<>();
+        deque2.addLast("2");
+        deque2.addLast("3");
+        deque2.addLast("4");
+        assertFalse(deque1.equals(deque2));
+
+        Deque<Integer> deque3 = new LinkedListDeque<>();
+        assertFalse(deque1.equals(deque3));
+
+        deque3.addLast(2);
+        deque3.addLast(3);
+        assertFalse(deque1.equals(deque3));
     }
 }
