@@ -2,6 +2,7 @@ package deque;
 
 import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class ArrayDequeComparisonTest {
@@ -134,7 +135,6 @@ public class ArrayDequeComparisonTest {
                 }
             } else if (operationNumber == 6) {
                 int index = StdRandom.uniform(0, N);
-//                assertEquals(expectedList.get(), actualList.get(index));
             }
         }
     }

@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private class Node {
         T val;
         Node tail;
@@ -40,10 +40,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
         newNode.prev.tail = newNode;
         this.size++;
     }
-
-//    public boolean isEmpty() {
-//        return this.size() == 0;
-//    }
 
     @Override
     public int size() {
@@ -114,17 +110,19 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
         if (this == o) {
             return true;
         }
-//        if (o instanceof Deque otherAD) {
-//            if (this.size() != otherAD.size()) {
-//                return false;
-//            }
-//            for (int i = 0; i < this.size(); i++) {
-//                if (this.get(i) != otherAD.get(i)) {
-//                    return false;
-//                }
-//            }
-//            return true;
-//        }
+        /*
+        if (o instanceof Deque otherAD) {
+            if (this.size() != otherAD.size()) {
+                return false;
+            }
+            for (int i = 0; i < this.size(); i++) {
+                if (this.get(i) != otherAD.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+         */
         if (o == null) {
             return false;
         }

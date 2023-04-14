@@ -2,7 +2,7 @@ package deque;
 
 import java.util.Iterator;
 
-public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] array;
     private int size;
     private int nextFirst;
@@ -67,10 +67,6 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         this.nextLast = Math.floorMod(this.nextLast, this.array.length);
     }
 
-//    public boolean isEmpty() {
-//        return this.size == 0;
-//    }
-
     @Override
     public int size() {
         return this.size;
@@ -78,7 +74,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
 
     @Override
     public void printDeque() {
-        int i = Math.floorMod((this.nextFirst + 1) ,this.array.length);
+        int i = Math.floorMod((this.nextFirst + 1), this.array.length);
         int l = this.size();
         while (l > 0) {
             System.out.print(this.array[i] + " ");
@@ -115,7 +111,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         if (this.usageRatio() < MIN_USAGE_RATIO && this.array.length > STARTING_SIZE) {
             this.resize(this.array.length / 2);
         }
-        int toBeDeletedIndex = Math.floorMod((this.nextLast - 1) ,this.array.length);
+        int toBeDeletedIndex = Math.floorMod((this.nextLast - 1), this.array.length);
         T toBeDeletedItem = this.array[toBeDeletedIndex];
         this.size--;
         this.nextLast = toBeDeletedIndex;
@@ -127,7 +123,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         if (index < 0 || index >= this.size()) {
             return null;
         }
-        int i = Math.floorMod((this.nextFirst + 1 + index) ,this.array.length);
+        int i = Math.floorMod((this.nextFirst + 1 + index), this.array.length);
         return this.array[i];
     }
 
@@ -136,18 +132,20 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T>{
         if (this == o) {
             return true;
         }
-//        if (o instanceof Deque otherAD) {
-//            if (this.size() != otherAD.size()) {
-//                return false;
-//            }
-//            for (int i = 0; i < this.size(); i++) {
-//                if (this.get(i) != otherAD.get(i)) {
-//                    return false;
-//                }
-//            }
-//            return true;
-//        }
-//        return false;
+        /*
+        if (o instanceof Deque otherAD) {
+            if (this.size() != otherAD.size()) {
+                return false;
+            }
+            for (int i = 0; i < this.size(); i++) {
+                if (this.get(i) != otherAD.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+         */
         if (o == null) {
             return false;
         }
