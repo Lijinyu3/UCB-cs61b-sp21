@@ -196,8 +196,10 @@ public class LinkedListDequeTest {
                 int index = StdRandom.uniform(0, N);
                 if (index >= expectedList.size()) {
                     assertNull(actualList.get(index));
+                    assertNull(actualList.getRecursive(index));
                 } else {
                     assertEquals(expectedList.get(index), actualList.get(index));
+                    assertEquals(expectedList.get(index), actualList.getRecursive(index));
                 }
             }
         }
