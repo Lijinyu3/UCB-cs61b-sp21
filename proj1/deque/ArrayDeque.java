@@ -17,6 +17,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         this.nextLast = 0;
     }
 
+    @Deprecated
     private void copyArray(T[] newArray) {
         int firstPos = (this.nextFirst + 1) % this.array.length;
         int lastPos = Math.floorMod(this.nextLast - 1, this.array.length);
@@ -39,9 +40,28 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
+    /**
+     * This method implements a more concise version of the copyArray method,
+     * which uses the get method and for loop to copy elements from this array to a new array.
+     * inspired by the specification in the 23sp Proj1B.*
+     */
+    private void copyArrayPlanB(T[] newArray) {
+        for (int i = 0; i < this.size; i++) {
+            newArray[i] = this.get(i);
+        }
+        this.nextFirst = newArray.length - 1;
+        this.nextLast = this.size;
+    }
+
+    private int getActualIndex(int index, int offset) {
+        index += offset;
+        return Math.floorMod(index, this.array.length);
+    }
+
     private void resize(int newSize) {
         T[] newArray = (T[]) new Object[newSize];
-        this.copyArray(newArray);
+//        this.copyArray(newArray);
+        this.copyArrayPlanB(newArray);
         this.array = newArray;
     }
 
@@ -52,8 +72,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
         this.array[nextFirst] = item;
         this.size++;
-        this.nextFirst--;
-        this.nextFirst = Math.floorMod(this.nextFirst, this.array.length);
+        this.nextFirst = this.getActualIndex(this.nextFirst, -1);
     }
 
     @Override
@@ -63,8 +82,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
         this.array[nextLast] = item;
         this.size++;
-        this.nextLast++;
-        this.nextLast = Math.floorMod(this.nextLast, this.array.length);
+        this.nextLast = this.getActualIndex(this.nextLast, 1);
     }
 
     @Override
@@ -74,12 +92,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public void printDeque() {
-        int i = Math.floorMod((this.nextFirst + 1), this.array.length);
-        int l = this.size();
-        while (l > 0) {
-            System.out.print(this.array[i] + " ");
-            l--;
-            i = (i + 1) % this.array.length;
+        for (int i = 0; i < this.size; i++) {
+            System.out.print(this.get(i) + " ");
         }
         System.out.println();
     }
@@ -96,7 +110,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (this.usageRatio() < MIN_USAGE_RATIO && this.array.length > STARTING_SIZE) {
             this.resize(this.array.length / 2);
         }
-        int toBeDeletedIndex = (this.nextFirst + 1) % this.array.length;
+        int toBeDeletedIndex = this.getActualIndex(this.nextFirst, 1);
         T toBeDeletedItem = this.array[toBeDeletedIndex];
         this.size--;
         this.nextFirst = toBeDeletedIndex;
@@ -111,7 +125,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (this.usageRatio() < MIN_USAGE_RATIO && this.array.length > STARTING_SIZE) {
             this.resize(this.array.length / 2);
         }
-        int toBeDeletedIndex = Math.floorMod((this.nextLast - 1), this.array.length);
+        int toBeDeletedIndex = this.getActualIndex(this.nextLast, -1);
         T toBeDeletedItem = this.array[toBeDeletedIndex];
         this.size--;
         this.nextLast = toBeDeletedIndex;
@@ -123,7 +137,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         if (index < 0 || index >= this.size()) {
             return null;
         }
-        int i = Math.floorMod((this.nextFirst + 1 + index), this.array.length);
+        int i = this.getActualIndex(this.nextFirst + 1, index);
         return this.array[i];
     }
 

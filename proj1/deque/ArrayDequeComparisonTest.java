@@ -16,8 +16,8 @@ public class ArrayDequeComparisonTest {
         public ADListNoResizing() {
             this.array = (T[]) new Object[N];
             this.size = 0;
-            this.nextFirst = N - 1;
-            this.nextLast = 0;
+            this.nextFirst = N / 2;
+            this.nextLast = this.nextFirst + 1;
         }
 
         public void addFirst(T item) {
@@ -41,7 +41,7 @@ public class ArrayDequeComparisonTest {
         }
 
         public T removeLast() {
-            if (this.isEmpty() || this.nextLast == 0) {
+            if (this.isEmpty()) {
                 return null;
             }
             T item = this.array[nextLast - 1];
@@ -51,7 +51,7 @@ public class ArrayDequeComparisonTest {
         }
 
         public T removeFirst() {
-            if (this.isEmpty() || this.nextFirst == N - 1) {
+            if (this.isEmpty()) {
                 return null;
             }
             T item = this.array[nextFirst + 1];
