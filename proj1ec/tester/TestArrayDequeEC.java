@@ -9,13 +9,13 @@ import student.StudentArrayDeque;
 
 public class TestArrayDequeEC {
     private static final String[] OPERATIONS =
-            {"addFirst(%s)", "addLast(%s)", "removeFirst(): %s", "removeLast(): %s"};
+            {"addFirst(%s)", "addLast(%s)", "removeFirst()", "removeLast()"};
 
-    private void updateSequences(StringBuilder sequence, int opNum, String opVal, String resVal) {
+    private void updateSequences(StringBuilder sequence, int opNum, String opVal) {
         if (opNum <= 1) {
             sequence.append(String.format(OPERATIONS[opNum], opVal));
         } else {
-            sequence.append(String.format(OPERATIONS[opNum], resVal));
+            sequence.append(String.format(OPERATIONS[opNum]));
         }
         sequence.append(System.lineSeparator());
     }
@@ -52,7 +52,7 @@ public class TestArrayDequeEC {
                 tmp = expectedDeque.removeLast();
                 resExpected = tmp == null ? "null" : String.valueOf(tmp);
             }
-            updateSequences(operationsSequence, opNum, opVal, resVal);
+            updateSequences(operationsSequence, opNum, opVal);
             assertEquals(operationsSequence.toString(), resExpected, resVal);
         }
     }
